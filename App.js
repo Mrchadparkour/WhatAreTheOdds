@@ -1,23 +1,75 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 
 export default class App extends React.Component {
+  constructor(){
+    super();
+    this.state = {
+      messageWidth: 0,
+      messageBoo: true,
+    };
+  }
+  Test(){
+    var load;
+    var unload;
+    var self = this;
+  if (this.state.messageBoo === true){
+    load = setInterval(function(){
+      if (self.state.messageWidth < 70){
+      self.setState({messageWidth: self.state.messageWidth+10});
+      }
+      else if (self.state.messageWidth === 70){
+        self.setState({messageWidth: 70});
+        clearInterval(load);
+      }
+    }, 10);
+  }
+  else{
+    unload = setInterval(function(){
+      if (self.state.messageWidth > 0){
+        self.setState({messageWidth: self.state.messageWidth-10});
+      }
+      else if (self.state.messageWidth === 0){
+        self.setState({messageWidth: 0});
+        clearInterval(unload);
+      }
+    }, 10);
+  }
+  this.setState({messageBoo: !this.state.messageBoo});
+  }
   render() {
-    return (
-      <View style={styles.container}>
-        <Text>Whaddup POmc</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
+    let messageBoardStyle = {
+        width: this.state.messageWidth+'%',
+        backgroundColor: 'lightblue',
+        height: '100%',
+        zIndex: -1,
+    }
+
+    return (<View>
+      <View style={styles.Home}>
+        <Text style={styles.Message} onPress={this.Test.bind(this)}>Messages</Text>
+        <View style={messageBoardStyle}>
+        </View>
+      </View>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+  Message: {
+    top: 20,
+    left: 10,
+    width: '27%',
+    textAlign: 'center',
+    fontSize: 15,
+    paddingVertical: 3,
+    backgroundColor: 'white',
+  },
+  Home: {
+    marginTop: 30,
+    width: '100%',
+    backgroundColor: 'grey',
+    height: '100%',
   },
 });
